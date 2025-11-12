@@ -1,0 +1,48 @@
+# ===============================
+# AI Newsreader Configuration
+# ===============================
+
+# --- Security Keys ---
+keys:
+  HEYGEN_API_KEY: "your_heygen_api_key_here"
+  GEMINI_API_KEY: "your_gemini_api_key_here"
+
+# --- News Feed Configuration ---
+news_feed:
+  RSS_FEED_URL: "http://feeds.bbci.co.uk/news/world/rss.xml"
+  PROXY_URL: "https://api.rss2json.com/v1/api.json"
+
+# --- Gemini API Configuration ---
+gemini:
+  MODEL: "gemini-2.5-flash-preview-09-2025"
+  BASE_URL: "https://generativelanguage.googleapis.com/v1beta/models"
+  PROMPT: >
+    You are a professional news summarizer.
+    Your task is to generate a concise, objective summary in exactly 5 sentences.
+    Capture the main topic, key actors, and outcome.
+
+# --- HeyGen API Configuration ---
+heygen:
+  BASE_URL: "https://api.heygen.com"
+  GENERATE_VIDEO_ENDPOINT: "/v2/video/generate"
+  STATUS_ENDPOINT: "/v1/video_status.get"
+  AVATAR_ID: "Daisy-inskirt-20220818"
+  VOICE_ID: "2d5b0e6cf36f460aa7fc47e3eee4ba54"
+  VIDEO_TITLE_PREFIX: "AI News Summary"
+  BACKGROUND_COLOR: "#1f2937"
+  DIMENSIONS:
+    width: 1280
+    height: 720
+
+# --- Runtime Settings ---
+runtime:
+  POLLING_INTERVAL_SECONDS: 10
+  MAX_RETRIES: 5
+  LOGGING: true
+  SAVE_OUTPUT: true
+  OUTPUT_DIRECTORY: "./output"
+
+# --- Optional Scheduler (for automation) ---
+scheduler:
+  enabled: false        # true = enable scheduled runs
+  interval_minutes: 60  # run every 60 minutes
