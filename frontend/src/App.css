@@ -1,0 +1,163 @@
+body {
+  margin: 0;
+  font-family: "Libre Baskerville", serif;
+  background-color: rgb(228, 217, 200);
+  color: #333;
+  justify-content: center;
+  text-align: center;
+}
+
+.header {
+  font-family: "Gravitas One", serif;
+  text-align: center;
+  background-color: #5b060b;
+  color: rgb(228, 217, 200);
+  padding: 20px 0;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  margin: 0;
+}
+
+.header p {
+  color: rgb(225, 225, 225);
+  margin: 0;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.news-card {
+  background: rgba(255, 255, 255, 0.64);
+  border-radius: 10px;
+  border: 2px solid rgba(112, 99, 83, 0.466);
+  padding: 20px;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.news-card.active {
+  border: 2px solid #75191d;
+  box-shadow: 0 0 15px rgba(192, 118, 118, 0.4);
+  background-color: rgb(206, 189, 164);
+}
+
+.news-card h2 {
+  font-family: "Chonburi", serif;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.news-card p {
+  color: #000000;
+  line-height: 1.5;
+}
+
+.card-footer {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-footer a {
+  text-decoration: none;
+  color: #516c85;
+  font-weight: 500;
+}
+
+.card-footer a:hover {
+  text-decoration: underline;
+}
+
+.card-footer button {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-top: 100px;
+}
+
+.play-btn {
+  font-family: "Libre Baskerville", serif;
+  background-color: #75191d;
+  color: whitesmoke;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.play-btn:hover {
+  background-color: #2e4566;
+  color: #e0eaf9;
+}
+
+/* While playing — glowing pulse animation */
+.play-btn.playing {
+  background-color: #0d3260;
+  animation: pulse 1.2s infinite;
+  color: #ffffff;
+}
+
+/* Pulse animation keyframes */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 88, 101, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(186, 246, 255, 0.712);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}
+
+/* 2️⃣ Horizontal scroll container for news thumbnails */
+.video-thumbnails {
+  background-color: rgb(228, 217, 200);
+  display: flex;
+  flex-wrap: wrap; /* allows cards to wrap to next line */
+  gap: 16px; /* space between cards */
+  justify-content: center; /* center the cards horizontally */
+}
+
+/* Scrollbar styling */
+.video-thumbnails::-webkit-scrollbar {
+  height: 8px;
+}
+
+.video-thumbnails::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+}
+
+/* 4️⃣ Responsive tweaks for smaller screens */
+@media (max-width: 768px) {
+  .video-thumbnails .news-card {
+    flex: 0 1 45%; /* 2 cards per row on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .video-thumbnails .news-card {
+    flex: 0 1 90%; /* 1 card per row on very small screens */
+  }
+}
