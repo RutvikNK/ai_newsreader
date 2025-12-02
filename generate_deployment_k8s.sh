@@ -6,20 +6,16 @@ BACKEND_IMAGE="gcr.io/${GCP_PROJECT_ID}/video-backend:latest"
 FRONTEND_IMAGE="gcr.io/${GCP_PROJECT_ID}/video-frontend:latest"
 NAMESPACE="default"
 
-echo "Setting up FINAL Kubernetes Manifests for Project: $GCP_PROJECT_ID"
-echo "Includes: Config folder for BackendConfig"
+echo "Generating Kubernetes Manifests for Project: $GCP_PROJECT_ID"
 
-# --- 0. CREATE DIRECTORY STRUCTURE ---
-echo "Creating directories..."
-mkdir -p deployments
-mkdir -p services
-mkdir -p autoscaling
-mkdir -p ingress
-mkdir -p config  # <--- NEW FOLDER
+# --- 0. DIRECTORIES ---
+echo "Creating directory structure..."
+mkdir -p deployments services autoscaling ingress config
 
 # --- 1. CONFIGURATION (config/) ---
 
 # BackendConfig (Fixes Google Load Balancer Health Check)
+# This is crucial so the Load Balancer knows to check /api/stories, not /
 cat <<EOF > config/backend-config.yaml
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
@@ -33,13 +29,13 @@ spec:
     healthyThreshold: 1
     unhealthyThreshold: 2
     type: HTTP
-    requestPath: /api/stories  # Tells Google LB to check this path
+    requestPath: /api/stories
     port: 8080
 EOF
 
 # --- 2. DEPLOYMENTS (deployments/) ---
 
-# Backend Deployment (Updated Probes)
+# Backend Deployment
 cat <<EOF > deployments/backend.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -68,14 +64,12 @@ spec:
         image: $BACKEND_IMAGE
         ports:
         - containerPort: 8080
-        # Liveness: Kills the pod if this fails (Internal K8s check)
         livenessProbe:
           httpGet:
             path: /api/stories
             port: 8080
           initialDelaySeconds: 20
           periodSeconds: 15
-        # Readiness: Stops traffic if this fails (Internal K8s check)
         readinessProbe:
           httpGet:
             path: /api/stories
@@ -143,7 +137,8 @@ EOF
 
 # --- 3. SERVICES (services/) ---
 
-# Backend Service (Updated with Annotation)
+# Backend Service
+# Includes annotation to link with config/backend-config.yaml
 cat <<EOF > services/backend.yaml
 apiVersion: v1
 kind: Service
@@ -151,7 +146,6 @@ metadata:
   name: backend-service
   namespace: $NAMESPACE
   annotations:
-    # Connects this service to the BackendConfig in the config/ folder
     cloud.google.com/backend-config: '{"default": "backend-health-check"}'
 spec:
   type: NodePort
@@ -263,7 +257,6 @@ spec:
 EOF
 
 echo "------------------------------------------------"
-echo "Structure created successfully!"
-echo ""
-echo "To deploy, simply run:"
+echo "Files created successfully!"
+echo "To deploy, run the following command:"
 echo "kubectl apply -f config/ -f services/ -f deployments/ -f autoscaling/ -f ingress/"
